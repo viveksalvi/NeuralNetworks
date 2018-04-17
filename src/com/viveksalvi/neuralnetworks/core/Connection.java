@@ -11,19 +11,7 @@ public class Connection {
         this.nextNeuron = nextNeuron;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public Neuron getPrevNeuron() {
-        return prevNeuron;
-    }
-
-    public Neuron getNextNeuron() {
-        return nextNeuron;
-    }
-
     public double output(){
-        return (this.getPrevNeuron().getOutput() * this.getWeight());
+        return (this.prevNeuron==null)?this.weight:(this.prevNeuron.getOutput() * this.weight);
     }
 }

@@ -30,4 +30,8 @@ public class Neuron {
         }
         return output;
     }
+
+    public void addPrevConnection(Connection prevConnection) {
+        this.prevConnections.add(prevConnection);
+    }
 }

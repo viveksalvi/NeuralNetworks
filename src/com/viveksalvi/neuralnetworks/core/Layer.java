@@ -8,7 +8,7 @@ public class Layer {
     private List<Neuron> neurons = new ArrayList<>();
 
     public Layer(int neuronsCount){
-        for(int i=0;i<neuronsCount;i++){
+        for(int i = 0; i < neuronsCount; i++){
             neurons.add(new Neuron());
         }
     }
