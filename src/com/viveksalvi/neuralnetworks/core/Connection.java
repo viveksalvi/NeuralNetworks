@@ -12,6 +12,6 @@ public class Connection {
     }
 
     public double output(){
-        return (this.prevNeuron==null)?this.weight:(this.prevNeuron.getOutput() * this.weight);
+        return this.prevNeuron.getOutput() * this.weight;
     }
 }

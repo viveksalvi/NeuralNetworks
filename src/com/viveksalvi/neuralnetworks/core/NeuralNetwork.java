@@ -8,23 +8,24 @@ public class NeuralNetwork {
     private List<Layer> layers = new ArrayList<>();
     private int[] conf = {2,3,2};
 
-    public NeuralNetwork(int... conf) throws Exception{
+    public NeuralNetwork(int[] conf, double bias) throws Exception{
         if(conf.length < 3)
             throw new Exception("At least three layers are required! INPUT, HIDDEN and OUTPUT");
 
         this.conf = conf;
         // Initialize each layer
-        for(int eachCount : conf){
-            layers.add(new Layer(eachCount));
+        for(int i = 0; i < conf.length; i++){
+            Layer layer = new Layer(conf[i]);
+            layers.add(layer);
         }
 
         // Connect All the layers
         for(int i = 0; i < layers.size() - 1; i++){
-            layers.get(i).connect(layers.get(i+1));
+            layers.get(i).connect(layers.get(i+1), bias);
         }
     }
 
-    public double[] feedForward(int[] inputs) throws Exception{
+    public double[] feedForward(double[] inputs) throws Exception{
 
         int inputSize = this.conf[0];
         int outputSize = this.conf[conf.length-1];
@@ -36,14 +37,14 @@ public class NeuralNetwork {
 
         //Setup input connections
         for(int i = 0; i < inputSize; i++){
-            Connection con = new Connection(null, this.layers.get(0).getNeurons().get(i) , inputs[i]);
-            this.layers.get(0).getNeurons().get(i).addPrevConnection(con);
+            this.layers.get(0).getNeurons().get(i).setValue(inputs[i]);
         }
 
         //Collect outputs
+        Layer lastLayer = this.layers.get(conf.length-1);
         for(int i = 0; i < outputSize; i++){
-            Layer lastLayer = this.layers.get(this.conf[this.conf.length-1]);
-            output[i] = lastLayer.getNeurons().get(i).getOutput();
+            Neuron outputNeuron = lastLayer.getNeurons().get(i);
+            output[i] = outputNeuron.getOutput();
         }
 
         return output;

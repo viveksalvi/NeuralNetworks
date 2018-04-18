@@ -8,30 +8,61 @@ public class Neuron {
 
     private List<Connection> prevConnections = new ArrayList<>();
     private List<Connection> nextConnections = new ArrayList<>();
+    private double value = 0;
 
-    public List<Connection> getPrevConnections() {
-        return prevConnections;
+    public Neuron(){}
+
+    public Neuron(double value){
+        this.value = value;
     }
 
-    public List<Connection> getNextConnections() {
-        return nextConnections;
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public void connect(Neuron nextNeuron, double weight){
         Connection con = new Connection(this, nextNeuron, weight);
-        this.getNextConnections().add(con);
-        nextNeuron.getPrevConnections().add(con);
+        this.addNextConnection(con);
+        nextNeuron.addPrevConnection(con);
     }
 
     public double getOutput(){
+        if(this.prevConnections.size() == 0)
+            return this.value;
+
         double output = 0;
         for(Connection eachPrevConnection: this.prevConnections){
             output += eachPrevConnection.output();
         }
-        return output;
+
+        //Apply Activation
+        return getActivatedOutput(output);
     }
 
     public void addPrevConnection(Connection prevConnection) {
         this.prevConnections.add(prevConnection);
     }
+
+    public void addNextConnection(Connection nextConnection) {
+        this.nextConnections.add(nextConnection);
+    }
+
+    private double getActivatedOutput(double output){
+        if(this.prevConnections.size()>0) {
+            return sigmoid(output);
+        }
+
+        return output;
+    }
+
+    private double sigmoid(double x){
+        //*        1
+        //* ---------------
+        //*  1 + (e ^ (-x))
+
+        double inverse_exponent = 1/Math.exp(x);
+        double denominator = 1 + inverse_exponent;
+        return 1/denominator;
+    }
+
 }
